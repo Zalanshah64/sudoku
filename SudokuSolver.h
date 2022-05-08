@@ -19,8 +19,7 @@ class SudokuSolver {
 
 
     public:
-    bool solveBoard();
-    void printBoard();
     SudokuSolver(SudokuBoard &board);
+    bool solveBoard();
 
 };

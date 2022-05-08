@@ -29,10 +29,12 @@ class SudokuBoard {
 
     public:
 
+    enum class Difficulty : uint8_t {EASY, MEDIUM, HARD, IMPOSSIBLE};
+
     SudokuBoard() {}
     SudokuBoard(ifstream &input);
 
-    void generate();
+    void generate(Difficulty difficulty);
 
     void tryNum(size_t row, size_t col, size_t val);
     void empty(size_t row, size_t col);

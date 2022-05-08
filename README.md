@@ -86,35 +86,38 @@ This part of the game is still a work in progress. I haven't figured out an algo
 
 ### Input files
 
-A valid input file must be a `.txt` file, and must be exactly 81 characters long. It should be 9 characters per line, each one being either an underscore (i.e. "_" ) or a number between 1 and 9. Additionally, the board must not be <a href="#validity">invalid</a>.  An example of a valid board would be:
+A valid input file must be a `.txt` file, and must be exactly 81 characters long. It should be 9 characters per line, each one being either a dash (i.e. "-" ) or a number between 1 and 9. Additionally, the board must not be <a href="#validity">invalid</a>.  An example of a valid board would be:
 
 ```
-926__8_1_
-_58_2_3_7
-___5__82_
-_9__57___
-__39___7_
-___61___5
-56____7__
-_______8_
-2_1___69_
+926--8-1-
+-58-2-3-7
+---5--82-
+-9--57---
+--39---7-
+---61---5
+56----7--
+-------8-
+2-1---69-
 ```
 
 <div id="commandLineArguments">
-### Command Line Arguments
+### Command Line Flags
 
-* -s \<filename\>, --solve \<filename\>
+* -s \<`filename`\>, --solve \<`filename`\>
     * Solves a given board from `filename` and prints it out
-* -g \<filename\>, --generate \<filename\>
-    * Generates a random board and outputs it to `filename` (This is still a work in progress :) )
+* -g \<`filename`\>, --generate \<`filename`\>
+    * Generates a random board with some number of empty squares (based on the difficulty level) and outputs it to `filename`
+    * `filename` must be a .txt file
+* -d <EASY|MEDIUM|HARD|IMPOSSIBLE>, --difficulty <EASY|MEDIUM|HARD|IMPOSSIBLE>
+    * Sets the difficulty of the board to be either easy, medium, hard, or impossible
+    * The higher the difficulty, the fewer squares a board will start with
 * -h, --help
     * Prints help information
+* -v, --version
+    * Prints the current version
 
 ### Normal Usage
-When just running the program, you will be greeted with a menu interface that wil ask you what you'd like to do. These will be largely the same as the <a href="#commandLineArguments">command line arguments,</a> with the addition of:
-
-* P
-    * Generates a random board and allows you to play the game (This is still a work in progress :) )
+When just running the program, you will be greeted with a menu interface that wil ask you what you'd like to do. These will be largely the same as the <a href="#commandLineArguments">command line arguments.</a>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

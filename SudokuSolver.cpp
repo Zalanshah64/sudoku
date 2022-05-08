@@ -63,7 +63,3 @@ bool SudokuSolver::promising(size_t row, size_t col, size_t value) {
 bool SudokuSolver::solveBoard() {
     return tryCoord(1, 1);
 }
-
-void SudokuSolver::printBoard() {
-    board.print();
-}
