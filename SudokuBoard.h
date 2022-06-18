@@ -7,6 +7,7 @@ using std::ofstream;
 class SudokuBoard {
     private:
     static const size_t boardSize = 9;
+    static const size_t numSquares = boardSize * boardSize;
 
     struct GridNumbers {
         size_t numbers[boardSize + 1][boardSize + 1];
@@ -37,9 +38,11 @@ class SudokuBoard {
     void generate(Difficulty difficulty);
 
     void tryNum(size_t row, size_t col, size_t val);
+    void tryIncorrect(size_t row, size_t col, size_t val);
     void empty(size_t row, size_t col);
 
     void print();
+    void print(size_t row, size_t col);
     void print(ofstream &of);
 
     inline BoardSquare& operator()(size_t row, size_t col) {
@@ -48,6 +51,10 @@ class SudokuBoard {
 
     inline size_t getNumSolved() {
         return numSolved;
+    }
+
+    inline bool solved() {
+        return numSolved == numSquares;
     }
 
     inline bool verify(size_t row, size_t col, size_t value) {

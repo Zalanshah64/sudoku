@@ -108,9 +108,12 @@ A valid input file must be a `.txt` file, and must be exactly 81 characters long
 * -g \<`filename`\>, --generate \<`filename`\>
     * Generates a random board with some number of empty squares (based on the difficulty level) and outputs it to `filename`
     * `filename` must be a .txt file
-* -d <EASY|MEDIUM|HARD|IMPOSSIBLE>, --difficulty <EASY|MEDIUM|HARD|IMPOSSIBLE>
+* -d \<`EASY` | `MEDIUM` | `HARD` | `IMPOSSIBLE`\>, --difficulty \<`EASY` | `MEDIUM` | `HARD` | `IMPOSSIBLE`\>
     * Sets the difficulty of the board to be either easy, medium, hard, or impossible
     * The higher the difficulty, the fewer squares a board will start with
+* -S <`seed`>, --seed <`seed`>
+    * Seeds a board generation with `seed`, ensuring the exact same board given the same seed
+    * `seed` may not contain any whitespace
 * -h, --help
     * Prints help information
 * -v, --version

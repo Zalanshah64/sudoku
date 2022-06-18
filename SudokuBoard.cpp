@@ -60,6 +60,9 @@ void SudokuBoard::clearBoard() {
     for(size_t i = 0; i < boardSize; i++) {
         for(size_t j = 0; j < boardSize; j++) {
             board[i][j].empty();
+            horizontal[i + 1][j + 1] = false;
+            vertical[i + 1][j + 1] = false;
+            grids[i + 1][j + 1] = false;
         }
     }
 
@@ -68,14 +71,6 @@ void SudokuBoard::clearBoard() {
 
 void SudokuBoard::generate(Difficulty difficulty) {
     clearBoard();
-    srand((unsigned int)time(NULL));
-    for(size_t i = 1; i < boardSize + 1; i++) {
-        for(size_t j = 1; j < boardSize + 1; j++) {
-            horizontal[i][j] = false;
-            vertical[i][j] = false;
-            grids[i][j] = false;
-        }
-    }
     size_t row, col, value;
 
     for(size_t i = 0; i < 9; i += 4) {
@@ -156,9 +151,17 @@ void SudokuBoard::generate(Difficulty difficulty) {
         size_t col = 1 + (rand() % 9);
 
         if(board[row][col].occupied()) {
-            board[row][col].empty();
+            empty(row, col);
         } else {
             i--;
+        }
+    }
+
+    for(size_t i = 1; i < boardSize + 1; i++) {
+        for(size_t j = 1; j < boardSize + 1; j++) {
+            if(board[i][j].occupied()) {
+                board[i][j].establish(board[i][j].getValue());
+            }
         }
     }
 }
@@ -170,6 +173,79 @@ void SudokuBoard::tryNum(size_t row, size_t col, size_t val) {
     vertical[col][val] = true;
     grids[getGrid(row, col)][val] = true;
     numSolved++;
+}
+
+void SudokuBoard::tryIncorrect(size_t row, size_t col, size_t val) {
+    board[row][col].tryIncorrect(val);
+
+    if(horizontal[row][val]) {
+        for(size_t i = 1; i < boardSize + 1; i++) {
+            if(board[row][i] == val) {
+                board[row][i].breakSquare();
+            }
+        }
+    }
+
+    if(vertical[col][val]) {
+        for(size_t i = 1; i < boardSize + 1; i++) {
+            if(board[i][col] == val) {
+                board[i][col].breakSquare();
+            }
+        }
+    }
+
+    if(grids[getGrid(row, col)][val]) {
+        size_t minRow, minCol;
+
+        switch(row) {
+            case 1:
+            case 2:
+            case 3:
+            minRow = 1;
+            break;
+            case 4:
+            case 5:
+            case 6:
+            minRow = 4;
+            break;
+            case 7:
+            case 8:
+            case 9:
+            minRow = 7;
+            break;
+        }
+
+        switch(row) {
+            case 1:
+            case 2:
+            case 3:
+            minCol = 1;
+            break;
+            case 4:
+            case 5:
+            case 6:
+            minCol = 4;
+            break;
+            case 7:
+            case 8:
+            case 9:
+            minCol = 7;
+            break;
+        }
+
+        for(size_t i = minRow; i < minRow + 3; i++) {
+            for(size_t j = minCol; j < minCol + 3; j++) {
+                if(board[i][j] == val) {
+                    board[i][j].breakSquare();
+                }
+            }
+        }
+
+    }
+
+    horizontal[row][val] = true;
+    vertical[col][val] = true;
+    grids[getGrid(row, col)][val] = true;
 }
 
 void SudokuBoard::empty(size_t row, size_t col) {
@@ -195,6 +271,33 @@ void SudokuBoard::print() {
             for(size_t j = 1; j < boardSize + 1; j++) {
                 cout << board[i][j]
                 << (((j) % 3 == 0) ? "  #  " : "  ");
+            }
+
+    }
+    cout << "\n#           #           #           #\n"
+         <<   "#####################################\n";
+}
+
+void SudokuBoard::print(size_t row, size_t col) {
+    for(size_t i = 1; i < boardSize + 1; i++) {
+        if((i - 1) % 3 == 0) {
+            if(i != 1) {
+                cout << "\n#           #           #           #";
+            }
+            cout << "\n#####################################\n"
+                 << "#           #           #           #\n#  ";
+        } else {
+            cout << "\n#           #           #           #\n#  ";
+        }
+            for(size_t j = 1; j < boardSize + 1; j++) {
+
+                if(i == row && j == col) {
+                    cout << ((board[i][j].incorrect()) ? "\033[47;31m" : "\033[47m") << board[i][j].getValue() << DEFAULT
+                    << (((j) % 3 == 0) ? "  #  " : "  ");
+                } else {
+                    cout << board[i][j]
+                    << (((j) % 3 == 0) ? "  #  " : "  ");
+                }
             }
 
     }

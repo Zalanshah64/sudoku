@@ -17,6 +17,20 @@ void BoardSquare::tryNum(const size_t val) {
     status = SquareStatus::testing;
 }
 
+void BoardSquare::establish(const size_t val) {
+    value = val;
+    status = SquareStatus::preloaded;
+}
+
+void BoardSquare::tryIncorrect(const size_t val) {
+    value = val;
+    status = SquareStatus::incorrect;
+}
+
+void BoardSquare::breakSquare() {
+    status = (status == SquareStatus::preloaded) ? SquareStatus::incorrectPreloaded : SquareStatus::incorrect;
+}
+
 void BoardSquare::empty() {
     value = 0;
     status = SquareStatus::empty;
