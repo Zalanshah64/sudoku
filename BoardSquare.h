@@ -24,6 +24,8 @@ class BoardSquare {
     size_t value = 0;
     SquareStatus status = SquareStatus::empty;
 
+    bool notations[9] = {0};
+
     public:
 
     BoardSquare();
@@ -34,6 +36,7 @@ class BoardSquare {
     void establish(const size_t val);
     void tryIncorrect(const size_t val);
     void breakSquare();
+    void fix();
 
     void empty();
 
@@ -68,9 +71,25 @@ class BoardSquare {
         }
     }
 
+    size_t focus(size_t row, size_t col,
+            BoardSquare *(&horizontal)[9],
+            BoardSquare *(&vertical)[9],
+            BoardSquare *(&grid)[9],
+            const bool (&horizontalOccupied)[9],
+            const bool (&verticalOccupied)[9],
+            const bool (&gridOccupied)[9]);
+
     bool inline incorrect() {
         return status > SquareStatus::testing;
     }
+
+    bool inline pregenerated() {
+        return status == SquareStatus::preloaded;
+    }
+
+    void addNotation(const size_t notation);
+    void removeNotation(const size_t notation);
+
 
     void inline print(ofstream &of) {
         if(value == 0) {

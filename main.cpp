@@ -1,5 +1,7 @@
+#include "main.h"
 #include "SudokuBoard.h"
 #include "SudokuSolver.h"
+#include "utilityFunctions.h"
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -15,41 +17,10 @@ using std::hash;
 #include <string.h>
 #include <fstream>
 using std::ifstream;
+#include <time.h>
 #include <getopt.h>
 #include <unistd.h>
 #include <termios.h>
-
-char getch(void)
-{
-    char buf = 0;
-    struct termios old = {0};
-    fflush(stdout);
-    if(tcgetattr(0, &old) < 0)
-        perror("tcsetattr()");
-    old.c_lflag &= ~ICANON;
-    old.c_lflag &= ~ECHO;
-    old.c_cc[VMIN] = 1;
-    old.c_cc[VTIME] = 0;
-    if(tcsetattr(0, TCSANOW, &old) < 0)
-        perror("tcsetattr ICANON");
-    if(read(0, &buf, 1) < 0)
-        perror("read()");
-    old.c_lflag |= ICANON;
-    old.c_lflag |= ECHO;
-    if(tcsetattr(0, TCSADRAIN, &old) < 0)
-        perror("tcsetattr ~ICANON");
-    return buf;
- }
-
-//Global Vars
-ifstream inputFile;
-ofstream outputFile;
-
-string solve;
-string generate;
-
-SudokuBoard::Difficulty difficulty = SudokuBoard::Difficulty::MEDIUM;
-unsigned int seed = (unsigned int)time(NULL);
 
 void printBanner() {
     cout << "************************************************************\n*                          SUDOKU                          *\n*                Solving, Playing, and More                *\n*                                                          *\n*                A program by By Zalan Shah                *\n************************************************************\n"
@@ -82,13 +53,13 @@ void printHelp() {
     << "Running without any flags will provide you with a menu to make decisions from." << endl;
 }
 
-void clear() {
-    if(system("clear") != 0) {
-        exit(1);
-    }
-}
-
 void tryValue(SudokuBoard &board, const size_t row, const size_t col, const size_t val) {
+    if(board(row, col).pregenerated()) {
+        return;
+    }
+
+    board.empty(row, col);
+
     if(board.verify(row, col, val)) {
             board.tryNum(row, col, val);
     } else {
@@ -96,21 +67,86 @@ void tryValue(SudokuBoard &board, const size_t row, const size_t col, const size
     }
 }
 
+void focus(SudokuBoard &board, size_t &row, size_t &col) {
+    BoardSquare *horizontal[9];
+    BoardSquare *vertical[9];
+    BoardSquare *grid[9];
+    bool horizontalOccupied[9] = {false};
+    bool verticalOccupied[9] = {false};
+    bool gridOccupied[9] = {false};
+
+    board.getSubgrid(row, col, grid);
+    for(size_t i = 1; i < 10; i++) {
+        horizontal[i - 1] = &board(row, i);
+        vertical[i - 1] = &board(i, col);
+
+        if(horizontal[i - 1]->getValue()) {
+            horizontalOccupied[horizontal[i - 1]->getValue() - 1] = true;
+        }
+        if(vertical[i - 1]->getValue()) {
+            verticalOccupied[vertical[i - 1]->getValue() - 1] = true;
+        }
+        if(grid[i - 1]->getValue()) {
+            gridOccupied[grid[i - 1]->getValue() - 1] = true;
+        }
+    }
+
+    size_t result = board(row,col).focus(row, col, horizontal, vertical, grid, horizontalOccupied, verticalOccupied, gridOccupied);
+    switch(result) {
+        case 0:
+            board.empty(row, col);
+        break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            tryValue(board, row, col, result);
+            if(board.solved()) {
+                return;
+            }
+        break;
+        case 10:
+        return;
+
+        case 'A':
+            row = (row == 1) ? 1 : row - 1;
+            break;
+        case 'B':
+            row = (row == 9) ? 9 : row + 1;
+            break;
+        case 'C':
+            col = (col == 9) ? 9 : col + 1;
+            break;
+        case 'D':
+            col = (col == 1) ? 1 : col - 1;
+            break;
+    }
+
+    focus(board, row, col);
+}
+
 void play() {
-    size_t row = 1;
-    size_t col = 1;
+    size_t row = 5;
+    size_t col = 5;
 
     SudokuBoard board;
     board.generate(difficulty);
+    time_t beginTime, endTime;
+    time(&beginTime);
 
     do {
         clear();
         board.print(row, col);
 
-        cout << "Input a direction, or input a number" << endl;
         char input = getch();
 
-        if(input == 27) {
+        switch(input) {
+            case 27:
             getch();
             switch(getch()) {
                 case 'A':
@@ -126,8 +162,7 @@ void play() {
                     col = (col == 1) ? 1 : col - 1;
                     break;
             }
-        } else {
-            switch(input) {
+            break;
             case '1':
             case '2':
             case '3':
@@ -139,12 +174,32 @@ void play() {
             case '9':
             tryValue(board, row, col, input - 48);
             break;
-
-            default:
+            case 'Q':
+            case 'q':
+            return;
             break;
-            }
+            case 10:
+            focus(board, row, col);
+            break;
+            case 127:
+            board.empty(row, col);
         }
     } while(!board.solved());
+
+    time(&endTime);
+    time_t timeElapsed =  endTime - beginTime;
+    struct tm *timeInfo = gmtime(&timeElapsed);
+    char buffer[9];
+    strftime(buffer, 9, "%H:%M:%S", timeInfo);
+
+    clear();
+
+    cout << "    B O A R D   C O M P L E T E D    ";
+    board.print();
+    cout << "You completed this board in " << buffer << "\nPress any key to continue" << endl;
+    getch();
+
+    return printMenu();
 }
 
 void printMenu() {
@@ -172,15 +227,14 @@ void printMenu() {
 
             if(!inputFile.is_open()) {
                 cerr << "Error: File does not exist: " << solve << endl;
-                sleep(2);
-                printMenu();
-                return;
+                cout << "Press any key to continue";
+                getch();
+                return printMenu();
             } else if(solve.substr(solve.find('.'), solve.size()) != ".txt") {
                 cerr << "Error: Input must be a text file: " << solve << endl;
-                inputFile.close();
-                sleep(2);
-                printMenu();
-                return;
+                cout << "Press any key to continue";
+                getch();
+                return printMenu();
             } else {
                 SudokuBoard board(inputFile);
                 SudokuSolver solver(board);
@@ -193,42 +247,39 @@ void printMenu() {
                 cout << "Press any key to continue" << endl;
                 inputFile.close();
                 getch();
-                printMenu();
-                return;
+                return printMenu();
             }
         break;
 
-        case 'G':
-        case 'g':
+        case 'G': case 'g':
             cout << "Enter output file name: " << flush;
             getline(cin, generate);
             outputFile.open(generate);
 
             if(!outputFile.is_open()) {
                 cerr << "Error: File does not exist: " << generate << endl;
-                sleep(2);
-                clear();
+                cout << "Press any key to continue";
+                getch();
                 return printMenu();
             } else if(generate.substr(generate.find('.'), generate.size()) != ".txt") {
                 cerr << "Error: Input must be a text file: " << generate << endl;
+                cout << "Press any key to continue";
                 outputFile.close();
-                sleep(2);
-                clear();
+                getch();
                 return printMenu();
             } else {
                 SudokuBoard board;
                 board.generate(difficulty);
                 board.print(outputFile);
 
-                cout << "Generated output to " << generate << ".\nPress any key to continue" << endl;
+                cout << "Generated output to " << generate << "\nPress any key to continue" << endl;
                 getch();
                 outputFile.close();
                 return printMenu();
             }
         break;
 
-        case 'P':
-        case 'p':
+        case 'P': case 'p':
         play();
         return printMenu();
         break;
@@ -239,32 +290,47 @@ void printMenu() {
             hash<string> hasher;
             seed = (unsigned int)hasher(generate);
             srand(seed);
-            cout << "Seed successfully generated. Press any key to continue" << endl;
-            getch();
+            return printMenu();
+        }
+        break;
+
+        case 'D': case 'd': {
+            cout << "Difficulty must be either EASY MEDIUM HARD or IMPOSSIBLE\nEnter difficulty: " << flush;
+
+            string newDifficulty;
+            getline(cin, newDifficulty);
+
+            if(newDifficulty == "EASY" || newDifficulty == "easy") {
+                difficulty = SudokuBoard::Difficulty::EASY;
+            } else if(newDifficulty == "MEDIUM" || newDifficulty == "medium") {
+                difficulty = SudokuBoard::Difficulty::MEDIUM;
+            } else if(newDifficulty == "HARD" || newDifficulty == "hard") {
+                difficulty = SudokuBoard::Difficulty::HARD;
+            } else if(newDifficulty == "IMPOSSIBLE" || newDifficulty == "impossible") {
+                difficulty = SudokuBoard::Difficulty::IMPOSSIBLE;
+            } else {
+                cerr << "Error: Unknown difficulty. Difficulty may only be EASY, MEDIUM, HARD, or IMPOSSIBLE\nPress any key to continue" << flush;
+                getch();
+                return printMenu();
+            }
+
             return printMenu();
         }
 
-        break;
-
-        case 'H':
-        case 'h':
+        case 'H': case 'h':
         printHelp();
         cout << "Press any key to continue" << endl;
         getch();
         return printMenu();
         break;
 
-        case 'V':
-        case 'v':
-        cout << "Version 1.2.1\nPress any key to continue" << endl;
+        case 'V': case 'v':
+        cout << "Version 1.3.1\nPress any key to continue" << endl;
+        getch();
         return printMenu();
         break;
 
-        case 'Q':
-        case 'q':
-            clear();
-            printBanner();
-            sleep(2);
+        case 'Q': case 'q':
             clear();
             exit(0);
         break;
@@ -272,9 +338,8 @@ void printMenu() {
         default:
         cerr << "Error: Invalid option: " << input
         << "\nPress anywhere to continue" << flush;
-        cin.get();
-        printMenu();
-        return;
+        getch();
+        return printMenu();
         break;
     }
 }
@@ -355,7 +420,7 @@ void readArguments(int argc, char** argv) {
             break;
 
             case 'v': {
-                cout << "v1.2.1" << endl;
+                cout << "v1.3.1" << endl;
                 exit(0);
             }
         }

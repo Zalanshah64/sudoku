@@ -17,9 +17,9 @@ class SudokuBoard {
     BoardSquare board[boardSize + 1][boardSize + 1];
     size_t numSolved = 0;
 
-    bool horizontal[boardSize + 1][boardSize + 1];
-    bool vertical[boardSize + 1][boardSize + 1];
-    bool grids[boardSize + 1][boardSize + 1];
+    size_t horizontal[boardSize + 1][boardSize + 1];
+    size_t vertical[boardSize + 1][boardSize + 1];
+    size_t grids[boardSize + 1][boardSize + 1];
     static GridNumbers gridNumbers;
 
     inline size_t getGrid(size_t row, size_t col) {
@@ -32,7 +32,7 @@ class SudokuBoard {
 
     enum class Difficulty : uint8_t {EASY, MEDIUM, HARD, IMPOSSIBLE};
 
-    SudokuBoard() {}
+    SudokuBoard();
     SudokuBoard(ifstream &input);
 
     void generate(Difficulty difficulty);
@@ -53,11 +53,13 @@ class SudokuBoard {
         return numSolved;
     }
 
+    void getSubgrid(const size_t row, const size_t col, BoardSquare *(&grid)[9]);
+
     inline bool solved() {
         return numSolved == numSquares;
     }
 
     inline bool verify(size_t row, size_t col, size_t value) {
-    return !(horizontal[row][value] || vertical[col][value] || grids[getGrid(row, col)][value]);
+        return !(horizontal[row][value] || vertical[col][value] || grids[getGrid(row, col)][value]);
     }
 };

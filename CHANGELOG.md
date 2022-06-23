@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.3.1: Literally the Whole Game
+
+### Added or Changed
+- Added option to change difficulty in main menu
+- Added ability to focus on square
+    - Added ability to notate squares
+    - Added minimap that shows affected squares
+    - Added data on vertical, horizontal, and subgrid numbers filled
+    - Added ability to remove and add numbers
+    - Added ability to move around subgrid during focus
+- Added ability to quit game
+- Added timing to game
+- Fixed bug where version isn't displayed correctly
+- Standardized all errors to ask for enter to continue
+- Added ability for board to determine when game is over
+- Reduced difficulty of difficulties
+- Updated README
+- Fixed bug where incorrect squares stay incorrect
+- Fixed bug where number being hovered over is hidden
+<br/>
+<br/>
 ## v1.2.1: It's All About the Game
 
 ### Added or Changed

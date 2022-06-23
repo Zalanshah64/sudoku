@@ -46,11 +46,53 @@ Sudoku is played on a 9x9 grid of numbers, broken up into 9 smaller 3x3 subgrids
 
 ### Playing the Game
 
-This part of the game is still a work in progress. It depends on being able to generate random boards, which I am still working on making an algorithm for. Stay tuned to be able to play real games soon :)
+To play the game, you can either load the program as normal and press ```P``` to play, or you can run ```./sudoku -p```
+
+Updating the difficulty and the seed will generate a completely different board. By default, the difficulty is set to `NORMAL`, and the seed is based on the current time.
+
+When you begin a game, you will be loaded into a randomly generated board. You will be able to move your cursor (the white pip on the board) up, down, left, and right by using the arrow keys. By pressing a number from 1 to 9, you can write that number to the specific square. There are several different colors denoting different things:
+<ul>
+  <li>Blue</li>
+  <ul><li>Numbers that were pregenerated. They can not be overwritten or modified.</li></ul>
+  <li>Green</li>
+  <ul><li>Squares with valid numbers that you have inputted</li></ul>
+  <li>Red</li>
+  <ul><li>Numbers that cause a conflict in their horizontal, vertical, or subgrid set</li>
+  <li>These will take over blue and green colorings</li></ul>
+  <li>Gray</li>
+  <ul><li>Squares that belong to the same horizontal, vertical, or subgrid set as your current location</li></ul>
+  <li>Orange</li>
+  <ul><li>Squares with the same number as the square you are currently on</li></ul>
+  <li>White</li>
+  <ul><li>Your current location</li></ul>
+</ul>
+
+You can either play the game on the main board, or choose to focus into a specific square. Focusing into a square will give you plenty of useful information:
+<ul>
+  <li>Notations</li>
+  <ul>
+    <li>By pressing `N`, you can add a notation to a specific square. This allows you to keep track of possible numbers a square could be.</li>
+    <li>If you try to notate an invalid square, the game will automatically remove it for you.</li>
+  </ul>
+
+  <li>Coordinates</li>
+
+  <li>Minimap</li>
+  <ul>
+    <li>A minimap of related squares is shown next to the main square. Related squares consist of squares that fall in the same vertical, horizontal, or subgrid as the selected coordinate</li>
+  </ul>
+
+  <li>Fulfilled Squares</li>
+  <ul>
+    <li>The horizontal, vertical, and subgrid must each contain 1 through 9 once each. Three lists showing which numbers exist in each set are shown.</li>
+  </ul>
+</ul>
 
 ### Generating Random Boards
 
-This part of the game is still a work in progress. I haven't figured out an algorithm for creating valid boards just yet. Stay tuned to see how I implement this :)
+You can generate a random board by using the `-g <filename>` or `--g <filename>` commands, where `filename` is the name of the file where the generated board is outputted to.
+
+This can be affected by the seed and the difficulty given.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -143,6 +185,8 @@ LinkedIn: [https://linkedin.com/in/zalan-shah](linkedin-url)
 ## Acknowledgments
 
 * [Othneil Drew for providing the template for this README.md](https://github.com/othneildrew/Best-README-Template)
+
+* [manytools.org for providing the Blocks font for focused squares](https://manytools.org/hacker-tools/ascii-banner/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
