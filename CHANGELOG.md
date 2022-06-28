@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.3.2: Whoops, Forgot a Few Things
+
+### Added or Changed
+- Updated seeding algorithm
+    - New seed is generated each time a game is played
+    - Seed is available to see during a game
+- Fixed compilation warnings
+- Fixed bug where pregenerated board squares are deletable
+- Fixed bug where screen clearing removes terminal history
+<br/>
+<br/>
+
 ## v1.3.1: Literally the Whole Game
 
 ### Added or Changed

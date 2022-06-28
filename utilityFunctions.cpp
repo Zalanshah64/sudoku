@@ -43,6 +43,11 @@ char getch(void)
         case 7: case 8: case 9:
         return 7;
     }
+
+    while(true) {
+        cout << "This shouldn't happen.\n";
+    }
+    return -1;
 }
 
 // "\033" is an escape sequence

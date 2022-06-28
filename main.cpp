@@ -6,7 +6,6 @@
 using std::cin;
 using std::cout;
 using std::getline;
-// using std::getch;
 using std::cerr;
 using std::endl;
 using std::flush;
@@ -130,6 +129,12 @@ void focus(SudokuBoard &board, size_t &row, size_t &col) {
     focus(board, row, col);
 }
 
+void seedify() {
+    hash<string> hasher;
+    seedNum = (unsigned int)hasher(seed);
+    srand(seedNum);
+}
+
 void play() {
     size_t row = 5;
     size_t col = 5;
@@ -174,15 +179,25 @@ void play() {
             case '9':
             tryValue(board, row, col, input - 48);
             break;
+            case 'S':
+            case 's':
+            cout << "Seed: " << seed
+            << "\nPress any key to continue" << flush;
+            getch();
+            break;
             case 'Q':
             case 'q':
+            seed = to_string(((unsigned int)time(NULL)));
+            seedify();
             return;
             break;
             case 10:
             focus(board, row, col);
             break;
             case 127:
-            board.empty(row, col);
+            if(!board(row, col).pregenerated()) {
+                board.empty(row, col);
+            }
         }
     } while(!board.solved());
 
@@ -191,6 +206,8 @@ void play() {
     struct tm *timeInfo = gmtime(&timeElapsed);
     char buffer[9];
     strftime(buffer, 9, "%H:%M:%S", timeInfo);
+    seed = to_string(((unsigned int)time(NULL)));
+    seedify();
 
     clear();
 
@@ -284,14 +301,11 @@ void printMenu() {
         return printMenu();
         break;
 
-        case 'S': {
-            cout << "Enter Seed: " << flush;
-            getline(cin, generate);
-            hash<string> hasher;
-            seed = (unsigned int)hasher(generate);
-            srand(seed);
-            return printMenu();
-        }
+        case 'S':
+        cout << "Enter Seed: " << flush;
+        getline(cin, seed);
+        seedify();
+        return printMenu();
         break;
 
         case 'D': case 'd': {
@@ -332,6 +346,7 @@ void printMenu() {
 
         case 'Q': case 'q':
             clear();
+            cout << ORIGINALSCREEN << flush;
             exit(0);
         break;
 
@@ -414,8 +429,8 @@ void readArguments(int argc, char** argv) {
             break;
 
             case 'S': {
-                hash<string> hasher;
-                seed = (unsigned int)hasher(optarg);
+                seed = optarg;
+                seedify();
             }
             break;
 
@@ -426,7 +441,7 @@ void readArguments(int argc, char** argv) {
         }
     }
 
-    srand(seed);
+    srand(seedNum);
 }
 
 int main(int argc, char **argv) {
@@ -451,6 +466,8 @@ int main(int argc, char **argv) {
         board.print(outputFile);
         exit(0);
     }
+
+    cout << ALTERNATESCREEN << flush;
 
     printMenu();
 }

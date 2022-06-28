@@ -69,6 +69,11 @@ class BoardSquare {
             return os << REDBACKGROUND << WHITETEXT << sq.value << DEFAULT;
             break;
         }
+
+        while(true) {
+            cout << "This shouldn't happen.\n";
+        }
+        return os;
     }
 
     size_t focus(size_t row, size_t col,

@@ -7,17 +7,22 @@ using std::ofstream;
 using std::string;
 
 
+#define ALTERNATESCREEN "\e[?1049h"
+#define ORIGINALSCREEN "\e[?1049l"
+
 ifstream inputFile;
 ofstream outputFile;
 string solve;
 string generate;
 SudokuBoard::Difficulty difficulty = SudokuBoard::Difficulty::MEDIUM;
-unsigned int seed = (unsigned int)time(NULL);
+string seed = to_string((unsigned int)time(NULL));
+unsigned int seedNum;
 
 void printBanner();
 void printHelp();
 void tryValue(SudokuBoard &board, const size_t row, const size_t col, const size_t val);
 void focus(SudokuBoard &board, size_t &row, size_t &col);
+void seedify();
 void play();
 void printMenu();
 void readArguments(int argc, char** argv);

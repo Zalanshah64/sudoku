@@ -376,7 +376,8 @@ void SudokuBoard::print(size_t row, size_t col) {
             << "\n            O P T I O N S            "
             << "\nArrow Keys   Move around board"
             << "\nEnter        Focus on selected square"
-            << "\nBackspace    Delete selected square"
+            << (!board[row][col].pregenerated() && board[row][col].occupied() ? "\nBackspace    Delete selected square" : "\n")
+            << "\nS, s         View seed"
             << "\nQ, q         Quit game";
     }
 
