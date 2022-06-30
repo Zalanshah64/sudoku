@@ -22,7 +22,12 @@ using std::ifstream;
 #include <termios.h>
 
 void printBanner() {
-    cout << "************************************************************\n*                          SUDOKU                          *\n*                Solving, Playing, and More                *\n*                                                          *\n*                A program by By Zalan Shah                *\n************************************************************\n"
+    cout <<   "************************************************************"
+         << "\n*                          SUDOKU                          *"
+         << "\n*                Solving, Playing, and More                *"
+         << "\n*                                                          *"
+         << "\n*                A program by By Zalan Shah                *"
+         << "\n************************************************************\n"
          << endl;
 }
 
@@ -37,7 +42,13 @@ void printHelp() {
     << "\t--solve <filename>, -s <filename>\n"
     << "\t\t- Solves a given board in <filename>, and prints the solved board to the terminal\n"
     << "\t--play, -p\n"
-    << "\t\t- Play the game. This command is a work in progress and currently unplayable. Thank you for your understanding :)\n"
+    << "\t\t- Play the game. If a seed hasn't been entered, a random seed is generated and a random board is given.\n"
+    << "\t\t- Pressing Enter on any given square allows you to focus on that square. This gives you extra information about the square.\n"
+    << "\t\t- While focused, you can press N to notate the board, allowing you to take notes.\n"
+    << "\t\t- Pressing backspace on a square deletes the number currently in it.\n"
+    << "\t\t- Pressing S provides you with the seed.\n"
+    << "\t\t- Pressing Q quits the game.\n"
+    << "\t\t- At the end, you are given the time it took you to solve the board.\n"
     << "\t--generate [filename], -g [filename]\n"
     << "\t\t- Generates a random sudoku board, and prints it to [filename] if given. If [filename] isn't given, the board is printed to the terminal\n"
     << "\t\t- If the difficulty flag is being used, a board will be generated according to the difficulty specified.\n"
@@ -93,7 +104,9 @@ void focus(SudokuBoard &board, size_t &row, size_t &col) {
     size_t result = board(row,col).focus(row, col, horizontal, vertical, grid, horizontalOccupied, verticalOccupied, gridOccupied);
     switch(result) {
         case 0:
+        if(!board(row, col).pregenerated()) {
             board.empty(row, col);
+        }
         break;
         case 1:
         case 2:
@@ -339,7 +352,7 @@ void printMenu() {
         break;
 
         case 'V': case 'v':
-        cout << "Version 1.3.1\nPress any key to continue" << endl;
+        cout << "v"<< VERSIONNUMBER <<"\nPress any key to continue" << endl;
         getch();
         return printMenu();
         break;
@@ -435,7 +448,7 @@ void readArguments(int argc, char** argv) {
             break;
 
             case 'v': {
-                cout << "v1.3.1" << endl;
+                cout << "v" << VERSIONNUMBER << endl;
                 exit(0);
             }
         }

@@ -1,5 +1,8 @@
+CC = g++
+CFLAGS = -Wall -std=c++17 -pedantic -Wextra -Wshadow -Wconversion
+
 edit:
-	g++ -O3 -o sudoku utilityFunctions.cpp BoardSquare.cpp SudokuBoard.cpp SudokuSolver.cpp main.cpp
+	$(CC) $(CFLAGS) -O3 -o sudoku utilityFunctions.cpp BoardSquare.cpp SudokuBoard.cpp SudokuSolver.cpp main.cpp
 
 debug:
-	g++ -g3 -o sudoku_debug utilityFunctions.cpp BoardSquare.cpp SudokuBoard.cpp SudokuSolver.cpp main.cpp
+	$(CC) $(CFLAGS) -g3 -o sudoku_debug utilityFunctions.cpp BoardSquare.cpp SudokuBoard.cpp SudokuSolver.cpp main.cpp

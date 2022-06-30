@@ -55,6 +55,7 @@ void BoardSquare::breakSquare() {
         case SquareStatus::testing:
         status = SquareStatus::incorrect;
         break;
+        default: break;
     }
 }
 
@@ -66,6 +67,7 @@ void BoardSquare::fix() {
         case SquareStatus::incorrectPreloaded:
         status = SquareStatus::preloaded;
         break;
+        default: break;
     }
 }
 
@@ -89,6 +91,7 @@ size_t BoardSquare::focus(size_t row, size_t col,
         case SquareStatus::incorrectPreloaded: case SquareStatus::incorrect:
         color = REDTEXT;
         break;
+        case SquareStatus::empty: break;
     }
 
     //Depending on the number, print the correct square
@@ -379,7 +382,7 @@ size_t BoardSquare::focus(size_t row, size_t col,
         case 'n': {
             if(!pregenerated()) {
                 cout << "Press number to add or remove it from annotations" << endl;
-                char input = getch();
+                input = getch();
 
                 if(input < '0' || input > '9') {
                     cout << "Error: Not a valid move. Press anywhere to continue\n" << endl;

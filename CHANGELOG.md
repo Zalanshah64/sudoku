@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.3: Man, I hate MacOS
+
+### Added or Changed
+- Updated --help flag
+- Added new compilation flags for more comprehensive warnings
+- Fixed bug where compilation wasn't working on MacOS
+    - program now compiles with c++17 rather than older versions that don't support enum classes
+<br/>
+<br/>
 ## v1.3.2: Whoops, Forgot a Few Things
 
 ### Added or Changed

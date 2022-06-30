@@ -7,8 +7,9 @@ using std::ofstream;
 using std::string;
 
 
-#define ALTERNATESCREEN "\e[?1049h"
-#define ORIGINALSCREEN "\e[?1049l"
+#define ALTERNATESCREEN "\033[?1049h"
+#define ORIGINALSCREEN "\033[?1049l"
+#define VERSIONNUMBER "1.3.3"
 
 ifstream inputFile;
 ofstream outputFile;

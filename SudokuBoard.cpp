@@ -84,7 +84,6 @@ void SudokuBoard::clearBoard() {
 
 void SudokuBoard::generate(Difficulty difficulty) {
     clearBoard();
-    size_t row, col, value;
 
     for(size_t i = 0; i < 9; i += 4) {
         list<size_t> valuesRemaining = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -255,7 +254,7 @@ void SudokuBoard::empty(size_t row, size_t col) {
 
 
         //Fix grid
-        size_t minRow, minCol;
+        size_t minRow = 0, minCol = 0;
 
         switch(row) {
             case 1: case 2: case 3:
@@ -312,8 +311,8 @@ void SudokuBoard::print() {
             if(i != 1) {
                 cout << "\n#           #           #           #";
             }
-            cout << "\n#####################################\n"
-                 << "#           #           #           #\n#  ";
+            cout << "\n#####################################"
+                 << "\n#           #           #           #\n#  ";
         } else {
             cout << "\n#           #           #           #\n#  ";
         }
