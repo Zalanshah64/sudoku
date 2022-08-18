@@ -16,6 +16,8 @@ using std::hash;
 #include <string.h>
 #include <fstream>
 using std::ifstream;
+#include <iterator>
+using std::size_t;
 #include <time.h>
 #include <getopt.h>
 #include <unistd.h>

@@ -3,6 +3,8 @@
 #include <fstream>
 using std::ifstream;
 using std::ofstream;
+#include <iterator>
+using std::size_t;
 
 class SudokuBoard {
     private:

@@ -14,6 +14,8 @@ using std::advance;
 using std::pair;
 #include <string>
 using std::string;
+#include <iterator>
+using std::size_t;
 
 
 SudokuBoard::GridNumbers SudokuBoard::gridNumbers =  {{

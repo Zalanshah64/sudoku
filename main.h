@@ -5,6 +5,8 @@ using std::ifstream;
 using std::ofstream;
 #include <string>
 using std::string;
+#include <iterator>
+using std::size_t;
 
 
 #define ALTERNATESCREEN "\033[?1049h"

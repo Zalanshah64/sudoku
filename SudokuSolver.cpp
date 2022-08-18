@@ -11,6 +11,8 @@ using std::stoi;
 using std::to_string;
 #include <limits>
 using std::numeric_limits;
+#include <iterator>
+using std::size_t;
 
 
 SudokuSolver::SudokuSolver(SudokuBoard &sudokuBoard) : board{sudokuBoard} {}

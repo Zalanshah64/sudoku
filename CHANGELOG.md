@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.4: Why's this still a problem?
+
+### Added or Changed
+- Finally fixed bug where compilation didn't work on MacOS
+- Added .gitignore to repository
+    - Removed .gitignore from personal .gitignore
+<br/>
+<br/>
+
 ## v1.3.3: Man, I hate MacOS
 
 ### Added or Changed
@@ -9,6 +18,7 @@
     - program now compiles with c++17 rather than older versions that don't support enum classes
 <br/>
 <br/>
+
 ## v1.3.2: Whoops, Forgot a Few Things
 
 ### Added or Changed
@@ -42,6 +52,7 @@
 - Fixed bug where number being hovered over is hidden
 <br/>
 <br/>
+
 ## v1.2.1: It's All About the Game
 
 ### Added or Changed
@@ -63,6 +74,7 @@
     - Fixed issue with makefile taking an excrutiating amount of time to compile
 <br/>
 <br/>
+
 ## v1.1.1: Generate, Difficulties, Splash of Color
 ### Added or Changed
 - Added Generate feature
@@ -73,6 +85,7 @@
 - Fixed bug where ./sudoku -s \<`filename`\> clears terminal
 <br/>
 <br/>
+
 ## v1.0.0: First implementation
 ### Added or Changed
 - Added Menu

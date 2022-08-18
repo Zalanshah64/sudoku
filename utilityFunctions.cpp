@@ -5,6 +5,8 @@ using std::cout;
 #include <unistd.h>
 #include <termios.h>
 #include <stdio.h>
+#include <iterator>
+using std::size_t;
 
 void clear() {
     if(system("clear") != 0) {

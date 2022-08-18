@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
-using std::size_t;
+// #include <cstdint>
+// using std::size_t;
 #include <iostream>
 using std::ostream;
 using std::cout;
@@ -9,6 +9,8 @@ using std::cout;
 using std::to_string;
 #include <fstream>
 using std::ofstream;
+#include <iterator>
+using std::size_t;
 
 #define DEFAULT "\033[0m"
 #define REDTEXT "\033[31m"

@@ -2,6 +2,8 @@
 #include "SudokuBoard.h"
 #include "utilityFunctions.h"
 #include <cstdint>
+// using std::size_t;
+#include <iterator>
 using std::size_t;
 #include <string>
 using std::string;
