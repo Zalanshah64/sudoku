@@ -252,7 +252,7 @@ size_t BoardSquare::focus(size_t row, size_t col,
     returnToSavedLocation();
     moveUp(10);
     moveRight(24 + col);
-
+    
     //Each time, print, and then move one row down, and move
     //one column left to realign with the relevant column
     for(size_t i = 0; i < 9; i++) {

@@ -6,6 +6,8 @@ using std::ofstream;
 #include <iterator>
 using std::size_t;
 
+#define BELL "\007"
+
 class SudokuBoard {
     private:
     static const size_t boardSize = 9;

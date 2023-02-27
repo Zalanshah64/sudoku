@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.3.5: Restructured code
+
+### Added or Changed
+- Moved all source files to src directory
+- Moved .h files to inc directory
+- Updated Makefile to compile all files to objects first
+    - Allows for quicker compilation
+- Added bell when incorrect number is written
+- Hide cursor when appropriate
+- Added framework for settings
+    - Will allow for future usage of settings
+- Optimized terminal clearing
+<br/>
+<br/>
+
 ## v1.3.4: Why's this still a problem?
 
 ### Added or Changed

@@ -9,9 +9,7 @@ using std::cout;
 using std::size_t;
 
 void clear() {
-    if(system("clear") != 0) {
-        exit(1);
-    }
+    cout << "\033[2J\033[1;1H";
 }
 
 static struct termios old, current;

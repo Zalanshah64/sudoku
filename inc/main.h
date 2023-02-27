@@ -1,4 +1,3 @@
-#pragma once
 #include "SudokuBoard.h"
 #include <fstream>
 using std::ifstream;
@@ -10,8 +9,10 @@ using std::size_t;
 
 
 #define ALTERNATESCREEN "\033[?1049h"
+#define HIDECURSOR "\033[?25l"
+#define SHOWCURSOR "\033[?25h"
 #define ORIGINALSCREEN "\033[?1049l"
-#define VERSIONNUMBER "1.3.3"
+#define VERSIONNUMBER "1.4.1"
 
 ifstream inputFile;
 ofstream outputFile;

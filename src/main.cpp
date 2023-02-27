@@ -2,6 +2,7 @@
 #include "SudokuBoard.h"
 #include "SudokuSolver.h"
 #include "utilityFunctions.h"
+#include "global.h"
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -11,6 +12,12 @@ using std::endl;
 using std::flush;
 #include <string>
 using std::string;
+#include <cctype>
+using std::isspace;
+#include <fstream>
+using std::fstream;
+#include <sstream>
+using std::stringstream;
 #include <functional>
 using std::hash;
 #include <string.h>
@@ -22,6 +29,9 @@ using std::size_t;
 #include <getopt.h>
 #include <unistd.h>
 #include <termios.h>
+#include <pwd.h>
+
+extern Settings settings;
 
 void printBanner() {
     cout <<   "************************************************************"
@@ -155,7 +165,7 @@ void play() {
     size_t col = 5;
 
     SudokuBoard board;
-    board.generate(difficulty);
+    board.generate(settings.difficulty);
     time_t beginTime, endTime;
     time(&beginTime);
 
@@ -239,11 +249,11 @@ void printMenu() {
     printBanner();
 
     cout << "Welcome to Sudoku. Please select an option below to begin:\n"
-    << "s        Solve\n"
-    << "G, g     Generate\n"
     << "P, p     Play\n"
     << "S        Seed\n"
     << "D, d     Difficulty\n"
+    << "G, g     Generate\n"
+    << "s        Solve\n"
     << "H, h     Help\n"
     << "V, v     Version\n"
     << "Q, q     Quit" << endl;
@@ -253,8 +263,9 @@ void printMenu() {
 
     switch(input) {
         case 's':
-            cout << "Enter input file name: " << flush;
+            cout << "Enter input file name: " << SHOWCURSOR << flush;
             getline(cin, solve);
+            cout << HIDECURSOR << flush;
             inputFile.open(solve);
 
             if(!inputFile.is_open()) {
@@ -284,8 +295,9 @@ void printMenu() {
         break;
 
         case 'G': case 'g':
-            cout << "Enter output file name: " << flush;
+            cout << "Enter output file name: " << SHOWCURSOR << flush;
             getline(cin, generate);
+            cout << HIDECURSOR << flush;
             outputFile.open(generate);
 
             if(!outputFile.is_open()) {
@@ -301,7 +313,7 @@ void printMenu() {
                 return printMenu();
             } else {
                 SudokuBoard board;
-                board.generate(difficulty);
+                board.generate(settings.difficulty);
                 board.print(outputFile);
 
                 cout << "Generated output to " << generate << "\nPress any key to continue" << endl;
@@ -317,26 +329,29 @@ void printMenu() {
         break;
 
         case 'S':
-        cout << "Enter Seed: " << flush;
+        cout << "Enter Seed: " << SHOWCURSOR << flush;
         getline(cin, seed);
+        cout << HIDECURSOR << flush;
         seedify();
         return printMenu();
         break;
 
         case 'D': case 'd': {
-            cout << "Difficulty must be either EASY MEDIUM HARD or IMPOSSIBLE\nEnter difficulty: " << flush;
+            cout << "Difficulty must be either EASY MEDIUM HARD or IMPOSSIBLE\nEnter difficulty: " << SHOWCURSOR << flush;
 
             string newDifficulty;
             getline(cin, newDifficulty);
 
+            cout << HIDECURSOR << flush;
+
             if(newDifficulty == "EASY" || newDifficulty == "easy") {
-                difficulty = SudokuBoard::Difficulty::EASY;
+                settings.difficulty = SudokuBoard::Difficulty::EASY;
             } else if(newDifficulty == "MEDIUM" || newDifficulty == "medium") {
-                difficulty = SudokuBoard::Difficulty::MEDIUM;
+                settings.difficulty = SudokuBoard::Difficulty::MEDIUM;
             } else if(newDifficulty == "HARD" || newDifficulty == "hard") {
-                difficulty = SudokuBoard::Difficulty::HARD;
+                settings.difficulty = SudokuBoard::Difficulty::HARD;
             } else if(newDifficulty == "IMPOSSIBLE" || newDifficulty == "impossible") {
-                difficulty = SudokuBoard::Difficulty::IMPOSSIBLE;
+                settings.difficulty = SudokuBoard::Difficulty::IMPOSSIBLE;
             } else {
                 cerr << "Error: Unknown difficulty. Difficulty may only be EASY, MEDIUM, HARD, or IMPOSSIBLE\nPress any key to continue" << flush;
                 getch();
@@ -361,7 +376,7 @@ void printMenu() {
 
         case 'Q': case 'q':
             clear();
-            cout << ORIGINALSCREEN << flush;
+            cout << SHOWCURSOR << ORIGINALSCREEN << flush;
             exit(0);
         break;
 
@@ -430,13 +445,13 @@ void readArguments(int argc, char** argv) {
 
             case 'd':
             if(strcmp(optarg, "EASY") == 0 || strcmp(optarg, "easy") == 0) {
-                difficulty = SudokuBoard::Difficulty::EASY;
+                settings.difficulty = SudokuBoard::Difficulty::EASY;
             } else if(strcmp(optarg, "MEDIUM") == 0 || strcmp(optarg, "medium") == 0) {
-                difficulty = SudokuBoard::Difficulty::MEDIUM;
+                settings.difficulty = SudokuBoard::Difficulty::MEDIUM;
             } else if(strcmp(optarg, "HARD") == 0 || strcmp(optarg, "hard") == 0) {
-                difficulty = SudokuBoard::Difficulty::HARD;
+                settings.difficulty = SudokuBoard::Difficulty::HARD;
             } else if(strcmp(optarg, "IMPOSSIBLE") == 0 || strcmp(optarg, "impossible") == 0) {
-                difficulty = SudokuBoard::Difficulty::IMPOSSIBLE;
+                settings.difficulty = SudokuBoard::Difficulty::IMPOSSIBLE;
             } else {
                 cerr << "Error: Unknown difficulty: " << optarg << ". Difficulty may only be EASY, MEDIUM, HARD, or IMPOSSIBLE" << endl;
                 exit(1);
@@ -476,13 +491,13 @@ int main(int argc, char **argv) {
         }
     } else if(generate != "") {
         SudokuBoard board;
-        board.generate(difficulty);
+        board.generate(settings.difficulty);
 
         board.print(outputFile);
         exit(0);
     }
 
-    cout << ALTERNATESCREEN << flush;
+    cout << ALTERNATESCREEN << HIDECURSOR << flush;
 
     printMenu();
 }

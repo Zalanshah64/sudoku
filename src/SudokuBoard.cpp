@@ -4,6 +4,7 @@
 #include <iostream>
 using std::cerr;
 using std::endl;
+using std::flush;
 #include <fstream>
 using std::ofstream;
 #include <list>
@@ -190,6 +191,7 @@ void SudokuBoard::tryNum(size_t row, size_t col, size_t val) {
 }
 
 void SudokuBoard::tryIncorrect(size_t row, size_t col, size_t val) {
+    cout << BELL << flush;
     board[row][col].tryIncorrect(val);
 
     if(horizontal[row][val]) {

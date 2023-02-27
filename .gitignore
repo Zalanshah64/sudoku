@@ -1,3 +1,5 @@
 sudoku
+sudoku_debug
 .vscode
 myTools
+obj/*
